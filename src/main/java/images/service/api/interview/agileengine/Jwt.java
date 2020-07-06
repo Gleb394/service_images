@@ -1,14 +1,15 @@
 package images.service.api.interview.agileengine;
 
-import org.jboss.resteasy.specimpl.MultivaluedTreeMap;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class Jwt {
@@ -17,23 +18,24 @@ public class Jwt {
     private static final String API_KEY_VALUE = "23567b218376f79d9415";
 
     private final HttpClient client;
+    private final Converter converter;
 
     @Autowired
-    public Jwt(HttpClient client) {
+    public Jwt(HttpClient client, Converter converter) {
         this.client = client;
+        this.converter = converter;
     }
 
-    public String getBearerToken() {
-        MultivaluedMap<String, String> body = new MultivaluedTreeMap<>();
-        List<String> values = new LinkedList<>();
+    public Map getBearerToken() throws JsonProcessingException {
+        Map<String, String> body = new HashMap<>();
+        body.put("apiKey", API_KEY_VALUE);
 
-        values.add(API_KEY_VALUE);
-        body.put("apiKey", values);
+        String jsonBody = converter.converterToJson(body);
 
-        Response response = client.getClient().target(URL).request().buildPost(Entity.json(body)).invoke();
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
-        System.out.println(response.readEntity(String.class));
+        Response response = client.getClient().target(URL).request().buildPost(Entity.json(jsonBody)).invoke();
 
-        return response.readEntity(String.class);
+        return converter.converterStringToMap(response.readEntity(String.class));
     }
 }
