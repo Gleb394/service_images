@@ -1,24 +1,22 @@
-package images.service.scheduled;
+package images.service.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import images.service.api.interview.agileengine.Jwt;
+import images.service.api.utils.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
-@Component
+@Service
 @EnableScheduling
-public class ScheduledSynchronyDb {
+public class AuthService {
 
     private final Jwt jwt;
 
-    private Map bearerToken;
+    private String bearerToken;
 
     @Autowired
-    public ScheduledSynchronyDb(Jwt jwt) {
+    public AuthService(Jwt jwt) {
         this.jwt = jwt;
     }
 

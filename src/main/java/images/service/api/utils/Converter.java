@@ -1,4 +1,4 @@
-package images.service.api.interview.agileengine;
+package images.service.api.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
