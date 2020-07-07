@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -15,7 +16,7 @@ public class Converter {
         return ow.writeValueAsString(object);
     }
 
-    public Map<String, String> converterStringToMap(String str) throws JsonProcessingException {
+    public Map<String, Object> converterStringToMap(String str) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(str, Map.class);
     }

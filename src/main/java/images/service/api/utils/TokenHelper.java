@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 @Component
-public class Jwt {
+public class TokenHelper {
 
     private static final String URL = "http://interview.agileengine.com/auth";
     private static final String API_KEY_VALUE = "23567b218376f79d9415";
@@ -16,18 +18,24 @@ public class Jwt {
     private final HttpClient client;
     private final HttpResponse httpResponse;
 
+    private String token;
+
     @Autowired
-    public Jwt(HttpClient client, HttpResponse httpResponse) {
+    public TokenHelper(HttpClient client, HttpResponse httpResponse) {
         this.client = client;
         this.httpResponse = httpResponse;
     }
 
     public String getBearerToken() throws JsonProcessingException {
-        Map<String, String> body = new HashMap<>();
-        body.put("apiKey", API_KEY_VALUE);
+        if (isNull(token)) {
+            Map<String, String> body = new HashMap<>();
+            body.put("apiKey", API_KEY_VALUE);
 
-        httpResponse.parseResponse(client.post(URL, body));
+            httpResponse.parseResponse(client.post(URL, body));
 
-        return httpResponse.getBodyAsMap().get("token");
+            token = (String) httpResponse.getBodyAsMap().get("token");
+        }
+
+        return token;
     }
 }

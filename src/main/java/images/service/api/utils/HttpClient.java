@@ -40,6 +40,6 @@ public class HttpClient {
     }
 
     public Response get(String url, String headerKey, String headerValue) {
-        return getClient().target(url).request().header(headerKey, headerValue).get();
+        return getClient().target(url).request().header(headerKey, "Bearer " + headerValue).get();
     }
 }

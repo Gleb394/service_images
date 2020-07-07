@@ -11,17 +11,17 @@ public class HttpResponse {
 
     private final Converter converter;
 
-    private Map<String, String> bodyAsMap;
+    private Map<String, Object> bodyAsMap;
 
     public HttpResponse(Converter converter) {
         this.converter = converter;
     }
 
     public void parseResponse(Response response) throws JsonProcessingException {
-        bodyAsMap = converter.converterStringToMap(response.readEntity(String.class));
+        this.bodyAsMap = converter.converterStringToMap(response.readEntity(String.class));
     }
 
-    public Map<String, String> getBodyAsMap() {
-        return bodyAsMap;
+    public Map<String, Object> getBodyAsMap() {
+        return this.bodyAsMap;
     }
 }
